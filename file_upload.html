@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>File(s) size</title>
+</head>
+
+<body>
+  <form name="uploadForm">
+    <div>
+      <input id="uploadInput" type="file" name="myFiles" multiple>
+      selected files: <span id="fileNum">0</span>;
+      total size: <span id="fileSize">0</span>
+    </div>
+  </form>
+
+  <script>
+  function updateSize() {
+    var formData = new FormData();
+    let nBytes = 0,
+        oFiles = this.files,
+        nFiles = oFiles.length;
+    for (let nFileId = 0; nFileId < nFiles; nFileId++) {
+      console.log(oFiles[nFileId]);
+      formData.append('file', oFiles[nFileId]);
+      nBytes += oFiles[nFileId].size;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://127.0.0.1:5000/upload_image', true);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        console.log('all done: ' + xhr.status);
+      } else {
+        console.log('Something went terribly wrong...');
+      }
+    };
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xhr.send(formData);
+    let sOutput = nBytes + " bytes";
+    document.getElementById("fileNum").innerHTML = nFiles;
+    document.getElementById("fileSize").innerHTML = sOutput;
+  }
+
+  document.getElementById("uploadInput").addEventListener("change", updateSize, false);
+  </script>
+</body>
+</html>
