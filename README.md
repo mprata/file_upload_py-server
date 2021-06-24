@@ -10,5 +10,5 @@ pip install flask
 
 pip install flask-restx
 
-To run python api.py
+To run:- python api.py
 
